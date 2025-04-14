@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Portafolio - Windows XP</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+        
+        .windows-xp {
+            background-color: #0A246A;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            position: relative;
+        }
+        
+        .logo {
+            margin-bottom: 30px;
+        }
+        
+        .logo img {
+            width: 200px;
+        }
+        
+        .loading-bar-container {
+            width: 400px;
+            height: 20px;
+            background-color: #043775;
+            border: 1px solid #81A5D5;
+            border-radius: 3px;
+            position: relative;
+            margin-bottom: 15px;
+        }
+        
+        .loading-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(to bottom, #81F1FA, #016197);
+            border-radius: 2px;
+            transition: width 0.5s;
+        }
+        
+        .loading-text {
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: normal;
+            text-align: center;
+        }
+        
+        .copyright {
+            position: absolute;
+            bottom: 20px;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        .portfolio-content {
+            display: none;
+            height: 100vh;
+            overflow-y: auto;
+            background: url('https://images7.alphacoders.com/115/thumb-1920-1158141.jpg') no-repeat center center;
+            background-size: cover;
+            color: black;
+            padding: 20px;
+        }
+        
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background: linear-gradient(to bottom, #245EDC, #0C59C5);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+            border-top: 1px solid #6B8DD6;
+        }
+        
+        .start-button {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            background: linear-gradient(to bottom, #35AD58, #248046);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            margin-right: 10px;
+            border-radius: 0 3px 3px 0;
+        }
+        
+        .taskbar-left {
+            display: flex;
+            align-items: center;
+        }
+        
+        .taskbar-right {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+            height: 100%;
+        }
+        
+        .system-tray {
+            background-color: #0C59C5;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+        }
+        
+        .tray-icon {
+            margin: 0 3px;
+            font-size: 12px;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .clock {
+            background-color: #0C59C5;
+            color: white;
+            font-size: 12px;
+            padding: 0 10px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            border-left: 1px solid #6B8DD6;
+        }
+        
+        .open-window-button {
+            background-color: #3985D8;
+            color: white;
+            height: 22px;
+            margin: 0 2px;
+            padding: 0 8px;
+            border-radius: 2px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .desktop-icon {
+            width: 80px;
+            height: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 10px;
+            cursor: pointer;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+        }
+        
+        .desktop-icon img {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 5px;
+        }
+        
+        .window {
+            position: absolute;
+            width: 70%;
+            height: 70%;
+            background-color: #ECE9D8;
+            border: 1px solid #0A246A;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+            display: none;
+            flex-direction: column;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 500;
+        }
+        
+        .window-header {
+            height: 30px;
+            background: linear-gradient(to right, #0A246A, #A6CAF0);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .window-controls {
+            display: flex;
+        }
+        
+        .control {
+            width: 16px;
+            height: 16px;
+            margin-left: 5px;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+        
+        .minimize { background-color: #FFC45E; }
+        .maximize { background-color: #44C93A; }
+        .close { background-color: #FF605C; }
+        
+        .window-content {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .start-menu-container {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            width: 320px;
+            height: 480px;
+            background-color: #FFFFFF;
+            border: 1px solid #0A246A;
+            border-bottom: none;
+            display: none;
+            flex-direction: column;
+            box-shadow: 2px -2px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+        }
+
+        .start-menu-header {
+            height: 60px;
+            background: linear-gradient(to right, #1E56AD, #5484ED);
+            display: flex;
+            align-items: center;
+            padding-left: 20px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .start-menu-user {
+            display: flex;
+            align-items: center;
+        }
+
+        .start-menu-user img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 1px solid white;
+        }
+
+        .start-menu-content {
+            display: flex;
+            flex: 1;
+        }
+
+        .start-menu-left {
+            width: 60%;
+            background-color: white;
+            padding: 5px 0;
+        }
+
+        .start-menu-right {
+            width: 40%;
+            background-color: #D3E5FA;
+            border-left: 1px solid #B5CDED;
+            padding: 10px;
+        }
+
+        .start-menu-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+
+        .start-menu-item:hover {
+            background-color: #3169C6;
+            color: white;
+        }
+
+        .start-menu-item img {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+
+        .start-menu-footer {
+            height: 40px;
+            background-color: #D3E5FA;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 10px;
+            border-top: 1px solid #B5CDED;
+        }
+
+        .shutdown-button {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .shutdown-button img {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Pantalla de carga de Windows XP -->
+    <div class="windows-xp" id="loading-screen">
+        <div class="logo">
+            <img src="/api/placeholder/200/80" alt="Windows XP Logo">
+        </div>
+        <div class="loading-bar-container">
+            <div class="loading-bar" id="loading-bar"></div>
+        </div>
+        <div class="loading-text" id="loading-text">Cargando competencias profesionales...</div>
+        <div class="copyright">© TU NOMBRE 2025</div>
+    </div>
+    
+    <!-- Contenido del portafolio (aparecerá después de la carga) -->
+    <div class="portfolio-content" id="portfolio-content">
+        <!-- Íconos de escritorio -->
+        <div class="desktop-icon" onclick="openWindow('about-me')">
+            <img src="/api/placeholder/48/48" alt="About Me">
+            <span>Sobre Mí</span>
+        </div>
+        <div class="desktop-icon" onclick="openWindow('projects')">
+            <img src="/api/placeholder/48/48" alt="Projects">
+            <span>Proyectos</span>
+        </div>
+        <div class="desktop-icon" onclick="openWindow('skills')">
+            <img src="/api/placeholder/48/48" alt="Skills">
+            <span>Habilidades</span>
+        </div>
+        <div class="desktop-icon" onclick="openWindow('contact')">
+            <img src="/api/placeholder/48/48" alt="Contact">
+            <span>Contacto</span>
+        </div>
+        
+        <!-- Barra de tareas de Windows XP -->
+        <div class="taskbar">
+            <div class="taskbar-left">
+                <div class="start-button" onclick="toggleStartMenu()">
+                    Inicio
+                </div>
+                <!-- Botones de ventanas abiertas -->
+                <div id="open-windows-buttons">
+                    <!-- Se agregarán dinámicamente -->
+                </div>
+            </div>
+            <div class="taskbar-right">
+                <div class="system-tray">
+                    <div class="tray-icon">🔊</div>
+                    <div class="tray-icon">🔌</div>
+                    <div class="tray-icon">📶</div>
+                    <div class="tray-icon">🔒</div>
+                </div>
+                <div class="clock" id="taskbar-clock">
+                    15:30<br>13/04/2025
+                </div>
+            </div>
+        </div>
+
+        <!-- Menú de inicio -->
+        <div class="start-menu-container" id="start-menu">
+            <div class="start-menu-header">
+                <div class="start-menu-user">
+                    <img src="/api/placeholder/40/40" alt="User">
+                    <span>TU NOMBRE</span>
+                </div>
+            </div>
+            <div class="start-menu-content">
+                <div class="start-menu-left">
+                    <div class="start-menu-item" onclick="openWindow('about-me'); toggleStartMenu();">
+                        <img src="/api/placeholder/24/24" alt="About">
+                        <span>Sobre Mí</span>
+                    </div>
+                    <div class="start-menu-item" onclick="openWindow('projects'); toggleStartMenu();">
+                        <img src="/api/placeholder/24/24" alt="Projects">
+                        <span>Mis Proyectos</span>
+                    </div>
+                    <div class="start-menu-item" onclick="openWindow('skills'); toggleStartMenu();">
+                        <img src="/api/placeholder/24/24" alt="Skills">
+                        <span>Habilidades</span>
+                    </div>
+                    <div class="start-menu-item" onclick="openWindow('contact'); toggleStartMenu();">
+                        <img src="/api/placeholder/24/24" alt="Contact">
+                        <span>Contacto</span>
+                    </div>
+                </div>
+                <div class="start-menu-right">
+                    <div class="start-menu-item">
+                        <img src="/api/placeholder/24/24" alt="Portfolio">
+                        <span>Mi Portafolio</span>
+                    </div>
+                    <div class="start-menu-item">
+                        <img src="/api/placeholder/24/24" alt="Resume">
+                        <span>Mi CV</span>
+                    </div>
+                    <div class="start-menu-item">
+                        <img src="/api/placeholder/24/24" alt="GitHub">
+                        <span>GitHub</span>
+                    </div>
+                    <div class="start-menu-item">
+                        <img src="/api/placeholder/24/24" alt="LinkedIn">
+                        <span>LinkedIn</span>
+                    </div>
+                </div>
+            </div>
+            <div class="start-menu-footer">
+                <div class="shutdown-button">
+                    <img src="/api/placeholder/20/20" alt="Shutdown">
+                    <span>Apagar</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Ventanas -->
+        <div class="window" id="window-about-me" data-title="Sobre Mí">
+            <div class="window-header">
+                <div>Sobre Mí</div>
+                <div class="window-controls">
+                    <div class="control minimize" onclick="minimizeWindow('about-me')"></div>
+                    <div class="control maximize" onclick="maximizeWindow('about-me')"></div>
+                    <div class="control close" onclick="closeWindow('about-me')"></div>
+                </div>
+            </div>
+            <div class="window-content">
+                <h2>Mi Perfil Profesional</h2>
+                <p>¡Hola! Soy [TU NOMBRE], un desarrollador web apasionado por crear experiencias digitales únicas y funcionales.</p>
+                <p>Mi experiencia incluye [TUS EXPERIENCIAS]. Me especializo en [TUS ESPECIALIDADES].</p>
+                <p>Cuando no estoy programando, disfruto [TUS HOBBIES].</p>
+                <h3>Educación</h3>
+                <ul>
+                    <li>[TU EDUCACIÓN 1]</li>
+                    <li>[TU EDUCACIÓN 2]</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="window" id="window-projects" data-title="Mis Proyectos">
+            <div class="window-header">
+                <div>Mis Proyectos</div>
+                <div class="window-controls">
+                    <div class="control minimize" onclick="minimizeWindow('projects')"></div>
+                    <div class="control maximize" onclick="maximizeWindow('projects')"></div>
+                    <div class="control close" onclick="closeWindow('projects')"></div>
+                </div>
+            </div>
+            <div class="window-content">
+                <h2>Proyectos Destacados</h2>
+                
+                <div style="margin-bottom: 30px;">
+                    <h3>Proyecto 1</h3>
+                    <img src="/api/placeholder/300/150" alt="Proyecto 1" style="max-width: 100%;">
+                    <p><strong>Descripción:</strong> [DESCRIPCIÓN DEL PROYECTO]</p>
+                    <p><strong>Tecnologías:</strong> HTML, CSS, JavaScript, etc.</p>
+                    <p><strong>Enlace:</strong> <a href="#">Ver proyecto</a></p>
+                </div>
+                
+                <div style="margin-bottom: 30px;">
+                    <h3>Proyecto 2</h3>
+                    <img src="/api/placeholder/300/150" alt="Proyecto 2" style="max-width: 100%;">
+                    <p><strong>Descripción:</strong> [DESCRIPCIÓN DEL PROYECTO]</p>
+                    <p><strong>Tecnologías:</strong> React, Node.js, etc.</p>
+                    <p><strong>Enlace:</strong> <a href="#">Ver proyecto</a></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="window" id="window-skills" data-title="Mis Habilidades">
+            <div class="window-header">
+                <div>Mis Habilidades</div>
+                <div class="window-controls">
+                    <div class="control minimize" onclick="minimizeWindow('skills')"></div>
+                    <div class="control maximize" onclick="maximizeWindow('skills')"></div>
+                    <div class="control close" onclick="closeWindow('skills')"></div>
+                </div>
+            </div>
+            <div class="window-content">
+                <h2>Competencias Técnicas</h2>
+                
+                <h3>Lenguajes de Programación</h3>
+                <ul>
+                    <li>HTML/CSS - Avanzado</li>
+                    <li>JavaScript - Avanzado</li>
+                    <li>Python - Intermedio</li>
+                    <li>PHP - Básico</li>
+                </ul>
+                
+                <h3>Frameworks & Herramientas</h3>
+                <ul>
+                    <li>React</li>
+                    <li>Vue.js</li>
+                    <li>Node.js</li>
+                    <li>Git</li>
+                </ul>
+                
+                <h3>Habilidades Blandas</h3>
+                <ul>
+                    <li>Trabajo en equipo</li>
+                    <li>Comunicación efectiva</li>
+                    <li>Resolución de problemas</li>
+                    <li>Aprendizaje continuo</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="window" id="window-contact" data-title="Contacto">
+            <div class="window-header">
+                <div>Contacto</div>
+                <div class="window-controls">
+                    <div class="control minimize" onclick="minimizeWindow('contact')"></div>
+                    <div class="control maximize" onclick="maximizeWindow('contact')"></div>
+                    <div class="control close" onclick="closeWindow('contact')"></div>
+                </div>
+            </div>
+            <div class="window-content">
+                <h2>¡Contáctame!</h2>
+                
+                <p>Estoy interesado en oportunidades de trabajo freelance o tiempo completo. ¡Hablemos sobre tu proyecto!</p>
+                
+                <ul>
+                    <li><strong>Email:</strong> tu@email.com</li>
+                    <li><strong>LinkedIn:</strong> linkedin.com/in/tuusuario</li>
+                    <li><strong>GitHub:</strong> github.com/tuusuario</li>
+                </ul>
+                
+                <h3>O envíame un mensaje:</h3>
+                <form>
+                    <div style="margin-bottom: 15px;">
+                        <label for="name">Nombre:</label><br>
+                        <input type="text" id="name" name="name" style="width: 100%; padding: 5px;">
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label for="email">Email:</label><br>
+                        <input type="email" id="email" name="email" style="width: 100%; padding: 5px;">
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label for="message">Mensaje:</label><br>
+                        <textarea id="message" name="message" rows="4" style="width: 100%; padding: 5px;"></textarea>
+                    </div>
+                    
+                    <button type="submit" style="background-color: #245EDC; color: white; border: none; padding: 8px 15px; cursor: pointer;">Enviar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mensajes de carga
+        const loadingMessages = [
+            "Iniciando sistema profesional...",
+            "Cargando habilidades técnicas...",
+            "Compilando proyectos...",
+            "Configurando experiencia laboral...",
+            "Optimizando interfaz de portafolio...",
+            "Instalando formación académica...",
+            "Indexando datos de contacto...",
+            "Iniciando Windows XP Portfolio..."
+        ];
+        
+        // Variables para la animación de carga
+        let progress = 0;
+        const loadingBar = document.getElementById('loading-bar');
+        const loadingText = document.getElementById('loading-text');
+        const loadingScreen = document.getElementById('loading-screen');
+        const portfolioContent = document.getElementById('portfolio-content');
+        
+        // Función para actualizar la barra de progreso
+        function updateProgress() {
+            if (progress < 100) {
+                progress += Math.random() * 10;
+                if (progress > 100) progress = 100;
+                
+                loadingBar.style.width = progress + '%';
+                
+                // Cambiar mensaje según el progreso
+                const messageIndex = Math.floor((progress / 100) * loadingMessages.length);
+                loadingText.textContent = loadingMessages[Math.min(messageIndex, loadingMessages.length - 1)];
+                
+                setTimeout(updateProgress, 400 + Math.random() * 800);
+            } else {
+                // Carga completa, mostrar contenido del portafolio
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                    portfolioContent.style.display = 'block';
+                    updateClock(); // Iniciar el reloj una vez que se carga el portafolio
+                    setInterval(updateClock, 60000); // Actualizar el reloj cada minuto
+                }, 1000);
+            }
+        }
+        
+        // Función para actualizar el reloj en la barra de tareas
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+            
+            document.getElementById('taskbar-clock').innerHTML = `${hours}:${minutes}<br>${day}/${month}/${year}`;
+        }
+        
+        // Función para mostrar/ocultar el menú de inicio
+        function toggleStartMenu() {
+            const startMenu = document.getElementById('start-menu');
+            if (startMenu.style.display === 'flex') {
+                startMenu.style.display = 'none';
+            } else {
+                startMenu.style.display = 'flex';
+            }
+        }
+        
+        // Funciones para manipular ventanas
+        const openWindows = {};
+        
+        function openWindow(windowId) {
+            const window = document.getElementById('window-' + windowId);
+            window.style.display = 'flex';
+            
+            // Registrar la ventana como abierta
+            if (!openWindows[windowId]) {
+                openWindows[windowId] = true;
+                updateTaskbarButtons();
+            }
+            
+            // Cerrar el menú de inicio si está abierto
+            document.getElementById('start-menu').style.display = 'none';
+        }
+        
+        function closeWindow(windowId) {
+            document.getElementById('window-' + windowId).style.display = 'none';
+            
+            // Quitar la ventana de la lista de ventanas abiertas
+            delete openWindows[windowId];
+            updateTaskbarButtons();
+        }
+        
+        function minimizeWindow(windowId) {
+            document.getElementById('window-' + windowId).style.display = 'none';
+            // La ventana sigue "abierta" en la barra de tareas
+        }
+        
+        function maximizeWindow(windowId) {
+            const window = document.getElementById('window-' + windowId);
+            // Implementación simple de maximizado/restaurado
+            if (window.style.width === '90%') {
+                window.style.width = '70%';
+                window.style.height = '70%';
+            } else {
+                window.style.width = '90%';
+                window.style.height = '90%';
+            }
+        }
+        
+        // Función para actualizar los botones de la barra de tareas
+        function updateTaskbarButtons() {
+            const taskbarButtons = document.getElementById('open-windows-buttons');
+            taskbarButtons.innerHTML = '';
+            
+            for (const windowId in openWindows) {
+                const window = document.getElementById('window-' + windowId);
+                const title = window.getAttribute('data-title');
+                
+                const button = document.createElement('div');
+                button.className = 'open-window-button';
+                button.textContent = title;
+                button.onclick = function() {
+                    const currentDisplay = window.style.display;
+                    if (currentDisplay === 'none') {
+                        window.style.display = 'flex';
+                    } else {
+                        minimizeWindow(windowId);
+                    }
+                };
+                
+                taskbarButtons.appendChild(button);
+            }
+        }
+        
+        // Iniciar animación de carga cuando se cargue la página
+        window.onload = function() {
+            setTimeout(updateProgress, 1000);
+            
+            // Cerrar el menú de inicio al hacer clic fuera de él
+            document.addEventListener('click', function(event) {
+                const startMenu = document.getElementById('start-menu');
+                const startButton = document.querySelector('.start-button');
+                
+                if (startMenu.style.display === 'flex' && 
+                    !startMenu.contains(event.target) && 
+                    !startButton.contains(event.target)) {
+                    startMenu.style.display = 'none';
+                }
+            });
+        };
+    </script>
+</body>
+</html>
